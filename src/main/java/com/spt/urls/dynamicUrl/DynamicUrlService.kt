@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.spt.urls.dynamicUrl
 
 import com.spt.urls.dynamicUrlDetails.DynamicUrlDetailsBean
@@ -56,7 +51,13 @@ class DynamicUrlService(
     fun createDynamicUrl(redirectUrl: String?): String {
         val urlId = randomService.randomString(6)
 
-        var url = "$CONF_HTTP_PROTOCOL://$CONF_DOMAIN"
+        // if http protocol is http  => localhost/?21356
+        // if http protocol is https => https://localhost/?21356
+
+        var url = CONF_DOMAIN
+        if (CONF_HTTP_PROTOCOL == "https") {
+            url = "$CONF_HTTP_PROTOCOL://$url"
+        }
         url += if (serverUseDefaultPort) "" else ":$CONF_PORT"
         url += "/?$urlId"
 
