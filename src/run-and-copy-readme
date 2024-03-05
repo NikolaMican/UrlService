@@ -1,0 +1,5 @@
+1. build
+       mvn clean install  (u root folderu projekta:)
+
+2. slanje fajla na server:
+        scp -i /Users/ibc/Desktop/dynamic_url/serversshkey/id_rsa_dynamic_url /Users/ibc/Desktop/all/prog/java/UrlService/target/UrlService-1.0-SNAPSHOT.jar root@165.22.28.99:/root/dynamic_url/
