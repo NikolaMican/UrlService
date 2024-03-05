@@ -1,4 +1,4 @@
-package services
+package com.spt.urls.services
 
 import java.security.SecureRandom
 

@@ -1,8 +1,8 @@
 
-package dynamicUrlDetails
+package com.spt.urls.dynamicUrlDetails
 
-import dbConection.BaseDbController
-import dbConection.HikariService
+import com.spt.urls.dbConection.BaseDbController
+import com.spt.urls.dbConection.HikariService
 import java.sql.Timestamp
 
 /**

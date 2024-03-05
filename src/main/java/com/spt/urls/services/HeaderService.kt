@@ -1,4 +1,4 @@
-package services
+package com.spt.urls.services
 
 import java.util.*
 import javax.servlet.http.HttpServletRequest

@@ -1,12 +1,12 @@
-package di
+package com.spt.urls.di
 
-import dbConection.HikariService
-import dynamicUrl.DynamicUrlDbController
-import dynamicUrl.DynamicUrlService
-import dynamicUrlDetails.DynamicUrlDetailsDbController
-import services.HeaderService
-import services.LocationService
-import services.RandomService
+import com.spt.urls.dbConection.HikariService
+import com.spt.urls.dynamicUrl.DynamicUrlDbController
+import com.spt.urls.dynamicUrl.DynamicUrlService
+import com.spt.urls.dynamicUrlDetails.DynamicUrlDetailsDbController
+import com.spt.urls.services.HeaderService
+import com.spt.urls.services.LocationService
+import com.spt.urls.services.RandomService
 
 fun di() = DiManager.instance
 

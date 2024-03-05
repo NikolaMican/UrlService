@@ -1,6 +1,6 @@
-package dbConection
+package com.spt.urls.dbConection
 
-import logs.TicketLoggerFactory
+import com.spt.urls.logs.TicketLoggerFactory
 import java.sql.SQLException
 
 open class BaseDbController(

@@ -3,16 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package webService
+package com.spt.urls.webService
 
-import di.di
-import logs.TicketLoggerFactory
+import com.spt.urls.di.di
+import com.spt.urls.logs.TicketLoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 import org.springframework.web.servlet.ModelAndView
-import webService.beans.CreateDynamicUrlResponse
+import com.spt.urls.webService.beans.CreateDynamicUrlResponse
 import java.lang.Exception
 import java.sql.SQLException
 import java.util.*

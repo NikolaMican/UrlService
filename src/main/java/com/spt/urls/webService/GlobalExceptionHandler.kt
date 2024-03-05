@@ -1,6 +1,6 @@
-package webService
+package com.spt.urls.webService
 
-import logs.TicketLoggerFactory
+import com.spt.urls.logs.TicketLoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice

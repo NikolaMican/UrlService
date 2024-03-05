@@ -1,6 +1,6 @@
-package services
+package com.spt.urls.services
 
-import extensions.fromJson
+import com.spt.urls.extensions.fromJson
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.impl.client.HttpClients
 import org.apache.http.util.EntityUtils

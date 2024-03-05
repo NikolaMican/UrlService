@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package webService
+package com.spt.urls.webService
 
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import services.IpService
+import com.spt.urls.services.IpService
 import java.util.*
 
 

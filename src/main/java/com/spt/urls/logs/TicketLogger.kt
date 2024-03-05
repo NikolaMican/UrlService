@@ -1,4 +1,4 @@
-package logs
+package com.spt.urls.logs
 
 import org.slf4j.Logger
 

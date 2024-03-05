@@ -1,10 +1,10 @@
-package dbConection
+package com.spt.urls.dbConection
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import logs.TicketLoggerFactory
-import webService.CONF_DB_PASS
-import webService.CONF_DB_USERNAME
+import com.spt.urls.logs.TicketLoggerFactory
+import com.spt.urls.webService.CONF_DB_PASS
+import com.spt.urls.webService.CONF_DB_USERNAME
 
 class HikariService {
     private val LOG = TicketLoggerFactory.getTicketLogger(HikariService::class.java)

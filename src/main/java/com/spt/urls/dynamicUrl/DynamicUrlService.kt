@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dynamicUrl
+package com.spt.urls.dynamicUrl
 
-import dynamicUrlDetails.DynamicUrlDetailsBean
-import dynamicUrlDetails.DynamicUrlDetailsDbController
-import logs.TicketLoggerFactory
-import services.RandomService
-import webService.CONF_DOMAIN
-import webService.CONF_HTTP_PROTOCOL
-import webService.CONF_PORT
+import com.spt.urls.dynamicUrlDetails.DynamicUrlDetailsBean
+import com.spt.urls.dynamicUrlDetails.DynamicUrlDetailsDbController
+import com.spt.urls.logs.TicketLoggerFactory
+import com.spt.urls.services.RandomService
+import com.spt.urls.webService.CONF_DOMAIN
+import com.spt.urls.webService.CONF_HTTP_PROTOCOL
+import com.spt.urls.webService.CONF_PORT
 
 /**
  *
