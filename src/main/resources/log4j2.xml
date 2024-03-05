@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <RollingFile 
+            name="MyFile" 
+            fileName="logs/ticket.log"
+            filePattern="logs/ticket.log.%d{dd-MM-yyyy}.log">
+            <PatternLayout pattern="%d %-5level[ses:%X{sessionId} uuid:%X{uuid} thread:%t] %logger{0} - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+        </RollingFile>
+        <Console name="Console">
+            <PatternLayout pattern="%d %-5level[ses:%X{sessionId} uuid:%X{uuid} thread:%t] %logger{0} - %msg%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="ERROR">
+            <AppenderRef ref="MyFile"/>
+            <AppenderRef ref="Console"/>
+        </Root>
+        <logger name="com.tickets" level="DEBUG" additivity="false">
+            <AppenderRef ref="MyFile"/>
+            <AppenderRef ref="Console"/>
+        </logger>
+    </Loggers>
+</Configuration>
