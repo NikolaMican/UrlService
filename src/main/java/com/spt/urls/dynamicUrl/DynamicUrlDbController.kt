@@ -47,7 +47,6 @@ class DynamicUrlDbController(
                 setInt(4, b.idDynamicUrl)
             }
             ps.executeUpdate()
-            ps.close()
         }
     }
 
@@ -67,7 +66,6 @@ class DynamicUrlDbController(
                 val numOfClicks = rs.getInt(COLUMN_NUM_OF_CLICKS)
                 return DynamicUrlBean(id, url, redirect, numOfClicks)
             }
-            rs.close()
             return null
         }
     }

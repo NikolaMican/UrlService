@@ -5,43 +5,16 @@
  */
 package com.spt.urls.dynamicUrlDetails
 
-/**
- *
- * @author Nikola Micanovic
- */
-class DynamicUrlDetailsBean {
-    var idDynamicUrlDetails = 0
-    var fkIdDynamicUrl = 0
-    var time: Long = 0
-    var location: String? = null
-    var browser: String? = null
-    var platform: String? = null
+data class DynamicUrlDetailsBean(
+    var idDynamicUrlDetails: Int = 0,
+    var fkIdDynamicUrl: Int = 0,
+    var time: Long = 0,
+    var location: String? = null,
+    var browser: String? = null,
+    var platform: String? = null,
     var isMobilePlatform: Boolean = false
 
-    constructor(
-        idDynamicUrlDetails: Int,
-        fkIdDynamicUrl: Int,
-        time: Long,
-        location: String?,
-        browser: String?,
-        platform: String?,
-        isMobilePlatform: Boolean
-    ) {
-        this.idDynamicUrlDetails = idDynamicUrlDetails
-        this.fkIdDynamicUrl = fkIdDynamicUrl
-        this.time = time
-        this.location = location
-        this.browser = browser
-        this.platform = platform
-        this.isMobilePlatform = isMobilePlatform
-    }
-
-    constructor(fkIdDynamicUrl: Int, time: Long, location: String?, browser: String?, platform: String?, isMobilePlatform: Boolean) {
-        this.fkIdDynamicUrl = fkIdDynamicUrl
-        this.time = time
-        this.location = location
-        this.browser = browser
-        this.platform = platform
-        this.isMobilePlatform = isMobilePlatform
-    }
+) {
+    constructor(fkIdDynamicUrl: Int, time: Long, location: String?, browser: String?, platform: String?, isMobilePlatform: Boolean):
+            this(0, fkIdDynamicUrl, time, location, browser, platform, isMobilePlatform)
 }
