@@ -1,0 +1,42 @@
+mysql server start/stop/restart:			ubuntu
+	brew services start mysql			systemctl start mysql.service,   systemctl status mysql.service
+	brew services stop mysql
+	brew services restart mysql			
+							systemctl enable mysql  - enable autostart mysql on ubuntu
+logovanje:
+ 	mysql -u root
+
+list running services:
+	brew services list
+
+list timer-a: 
+    systemctl list-timers
+	
+
+show databases;
+use <my_database>;
+show tables;
+
+// ================== pravljenje systemctl servisa
+  1. dodati fajl u /etc/systemd/system.   pr /etc/systemd/system/dynamic_url.service    (u ovom fajlu se moze definisati putanja do log fajla gde zelis da idu logovi)
+  2. pozvati  systemctl daemon-reload da ucita promene. Ovo se mora pozvati svaki put kada se radi promena dynamic_url.service fajla 
+  3. operacije:
+        systemctl start dynamic_url 
+        systemctl stop dynamic_url
+        systemctl status dynamic_url
+  4. ukoliko zelimo da se servis sam startuje nakon restarta servera treba izvrsiti komandu  systemctl enable dynamic_url
+
+
+--------------------------- ubuntu droplet digital ocean ----------------
+instalacija   mysql:   https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04
+
+conf file:  /etc/mysql/mysql.conf.d/mysqld.cnf
+
+
+
+prikaz 5 procesa koji najvishe trose RAM memoriju:  	ps  -aux --sort -rss|head -5
+PRIKAZ OTVORENIH PORTOVA         			ss -tap | grep mysql
+trenutni broj konekcija      				select count(host) from information_schema.processlist;    or show status where variable_name = 'threads_connected';
+max broj konekcija					select @@max_connections;
+
+http://165.22.28.99:8080/createDynamicUrl?redirectUrl=www.google.com

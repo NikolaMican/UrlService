@@ -3,6 +3,7 @@ package com.spt.urls.dynamicUrlDetails
 
 import com.spt.urls.dbConection.BaseDbController
 import com.spt.urls.dbConection.HikariService
+import java.sql.Statement
 import java.sql.Timestamp
 
 /**
@@ -27,19 +28,19 @@ class DynamicUrlDetailsDbController(
 
     fun insert(bean: DynamicUrlDetailsBean) {
         hikariService.getHikariInstance().connection.use {
-            synchronized(QUERY_INSERT) {
-                val ps = it.prepareStatement(QUERY_INSERT).apply {
-                    setInt(1, bean.fkIdDynamicUrl)
-                    setTimestamp(2, Timestamp(bean.time))
-                    setString(3, bean.location)
-                    setString(4, bean.browser)
-                    setString(5, bean.platform)
-                    setBoolean(6, bean.isMobilePlatform)
-
-                }
+            it.prepareStatement(QUERY_INSERT, Statement.RETURN_GENERATED_KEYS).apply {
+                setInt(1, bean.fkIdDynamicUrl)
+                setTimestamp(2, Timestamp(bean.time))
+                setString(3, bean.location)
+                setString(4, bean.browser)
+                setString(5, bean.platform)
+                setBoolean(6, bean.isMobilePlatform)
+            }.use { ps ->
                 ps.executeUpdate()
-                val id = getLastId(TABLE_NAME)
-                bean.idDynamicUrlDetails = id
+                ps.generatedKeys.use { rs ->
+                    rs.next()
+                    bean.idDynamicUrlDetails = rs.getInt(1)  // get autoincrement key
+                }
             }
         }
     }
@@ -47,37 +48,39 @@ class DynamicUrlDetailsDbController(
 
 //    fun edit(b: DynamicUrlDetailsBean) {
 //        hikariService.getHikariInstance().connection.use {
-//            val ps = it.prepareStatement(QUERY_EDIT).apply {
+//            it.prepareStatement(QUERY_EDIT).apply {
 //                setInt(1, b.fkIdDynamicUrl)
 //                setTimestamp(2, Timestamp(b.time))
 //                setString(3, b.location)
 //                setString(4, b.browser)
 //                setString(5, b.platform)
 //                setInt(6, b.idDynamicUrlDetails)
+//            }.use { ps ->
+//                ps.executeUpdate()
 //            }
-//            ps.executeUpdate()
 //        }
 //    }
 
-    fun delete(b: DynamicUrlDetailsBean)  = delete(TABLE_NAME, b.idDynamicUrlDetails)
+    fun delete(b: DynamicUrlDetailsBean) = delete(TABLE_NAME, b.idDynamicUrlDetails)
 
     fun get(id: Int): DynamicUrlDetailsBean? {
         hikariService.getHikariInstance().connection.use {
-            val ps = it.prepareStatement(QUERY_GET_ALL).apply {
+            it.prepareStatement(QUERY_GET_ALL).apply {
                 setInt(1, id)
+            }.use { ps ->
+                ps.executeQuery().use { rs ->
+                    if (rs.next()) {
+                        val fkIdDynamicUrlDetails = rs.getInt(COLUMN_FK_ID_DYNAMIC_URL_DETAILS)
+                        val time = rs.getTimestamp(COLUMN_TIME)
+                        val location = rs.getString(COLUMN_LOCATION)
+                        val browser = rs.getString(COLUMN_BROWSER)
+                        val platform = rs.getString(COLUMN_PLATFORM)
+                        val isMobilePlatform = rs.getBoolean(COLUMN_IS_MOBILE_PLATFORM)
+                        return DynamicUrlDetailsBean(id, fkIdDynamicUrlDetails, time.time, location, browser, platform, isMobilePlatform)
+                    }
+                    return null
+                }
             }
-            val rs = ps.executeQuery()
-
-            if (rs.next()) {
-                val fkIdDynamicUrlDetails = rs.getInt(COLUMN_FK_ID_DYNAMIC_URL_DETAILS)
-                val time = rs.getTimestamp(COLUMN_TIME)
-                val location = rs.getString(COLUMN_LOCATION)
-                val browser = rs.getString(COLUMN_BROWSER)
-                val platform = rs.getString(COLUMN_PLATFORM)
-                val isMobilePlatform = rs.getBoolean(COLUMN_IS_MOBILE_PLATFORM)
-                return DynamicUrlDetailsBean(id, fkIdDynamicUrlDetails, time.time, location, browser, platform, isMobilePlatform)
-            }
-            return null
         }
     }
 }

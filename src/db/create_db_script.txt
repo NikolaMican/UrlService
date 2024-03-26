@@ -1,0 +1,28 @@
+CREATE DATABASE if not exists `dynamic_url` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+use dynamic_url;
+
+# NOTE:  u tabeli 'dynamic_url' kolona 'url_id' ima drugaciji COLLATION zato sto je bitno da bude case sensiteve
+CREATE TABLE if not exists `dynamic_url` (
+  `id_dynamic_url` int NOT NULL AUTO_INCREMENT,
+  `url_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `redirect_url` varchar(512) DEFAULT NULL,
+  `num_of_clicks` int DEFAULT NULL,
+  PRIMARY KEY (`id_dynamic_url`),
+  UNIQUE KEY `url_id` (`url_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE if not exists `dynamic_url_details` (
+  `id_dynamic_url_details` int NOT NULL AUTO_INCREMENT,
+  `fk_id_dynamic_url` int NOT NULL,
+  `click_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `location` varchar(128) DEFAULT NULL,
+  `browser` varchar(128) DEFAULT NULL,
+  `platform` varchar(128) DEFAULT NULL,
+  `isMobilePlatform` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id_dynamic_url_details`),
+  KEY `fk_id_dynamic_url` (`fk_id_dynamic_url`),
+  CONSTRAINT `dynamic_url_details_ibfk_1` FOREIGN KEY (`fk_id_dynamic_url`) REFERENCES `dynamic_url` (`id_dynamic_url`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+

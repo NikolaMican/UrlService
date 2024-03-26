@@ -7,6 +7,7 @@ package com.spt.urls.webService
 
 import com.spt.urls.di.di
 import com.spt.urls.logs.TicketLoggerFactory
+import com.spt.urls.services.LocationApiResponse
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
@@ -24,7 +25,7 @@ class DynamicUrlWebServiceController {
     private val LOG = TicketLoggerFactory.getTicketLogger(DynamicUrlWebServiceController::class.java)
 
     private val dynamicUrlService = di().getDynamicUrlService()
-    private val dbController = di().getDynamicUrlDbController()
+    private val dynamicUrlDbController = di().getDynamicUrlDbController()
     private val headerService = di().getHeaderService()
     private val locationService = di().getLocationService()
 
@@ -61,10 +62,10 @@ class DynamicUrlWebServiceController {
         @RequestParam(name = "redirectUrl") redirectUrl: String
     ) {
         LOG.info("Processing editDynamicUrl request, urlId: $urlId, redirectUrl: $redirectUrl")
-        val dUBean = dbController.get(urlId) ?: throw ResponseStatusException(HttpStatus.NOT_EXTENDED, "Required urlId: '$urlId' doesn't exits")
+        val dUBean = dynamicUrlDbController.get(urlId) ?: throw ResponseStatusException(HttpStatus.NOT_EXTENDED, "Required urlId: '$urlId' doesn't exits")
         dUBean.redirectUrl = getNormalisedUrl(redirectUrl.lowercase())
         throwExceptionIfRedirectUrlContainsOurDomain(dUBean.redirectUrl)
-        dbController.edit(dUBean)
+        dynamicUrlDbController.edit(dUBean)
 
         //   http://localhost:8080/editDynamicUrl?urlId=123456&redirectUrl=www.rts.rs
         //   http://localhost:80808/editDynamicUrl?urlId=12345&redirectUrl=https://www.rts.rs
@@ -76,21 +77,12 @@ class DynamicUrlWebServiceController {
     @RequestMapping(value = ["/"], method = [RequestMethod.GET])
     @Throws(SQLException::class)
     fun clickOnDynamicUrl(request: HttpServletRequest, httpServletResponse: HttpServletResponse) {
-
         printHeader(request)
-        val location =
-            try {
-                val clientIp = request.getHeader("x-forwarded-for") ?: request.remoteAddr
-                LOG.info("\t clientIp: $clientIp")
-                if (clientIp == null) {
-                    null
-                } else {
-                    locationService.getLocationUseApacheHttpClient(clientIp)
-                }
-        } catch (e: Exception) {
-            LOG.error("failed to get location", e)
-            null
-        }
+
+        val clientIp = request.getHeader("x-forwarded-for") ?: request.remoteAddr
+        LOG.info("\t clientIp: $clientIp")
+        val location =  getLocation(clientIp)
+
         val county = location?.country
         val city = location?.city
         LOG.info("county: $county, city: $city")
@@ -118,6 +110,24 @@ class DynamicUrlWebServiceController {
         httpServletResponse.status = 302
     }
 
+    private fun getLocation(clientIpAddress: String?): LocationApiResponse? {
+        return null   // @TODO this is temporary solution
+
+//        val location =
+//            try {
+//                LOG.info("\t clientIp: $clientIpAddress")
+//                if (clientIpAddress == null) {
+//                    null
+//                } else {
+//                    locationService.getLocationUseApacheHttpClient(clientIpAddress)
+//                }
+//        } catch (e: Exception) {
+//            LOG.error("failed to get location", e)
+//            null
+//        }
+//        return location
+    }
+
     private fun throwExceptionIfRedirectUrlContainsOurDomain(redirectUrl: String) {
         if (redirectUrl.contains(MY_IP_ADDRESS) || redirectUrl.contains(CONF_DOMAIN)) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "It\'s not allowed to use our domain links in redirectUrl: $redirectUrl. We prevent infinity loop with it.")
@@ -131,7 +141,7 @@ class DynamicUrlWebServiceController {
         val header = request.headerNames
         while (header.hasMoreElements()) {
             val attributeName = header.nextElement()
-            LOG.info("\t attributeName: "+ attributeName + ", value: " + request.getHeader(attributeName)  );
+            LOG.info("\t attributeName: "+ attributeName + ", value: " + request.getHeader(attributeName))
         }
     }
 

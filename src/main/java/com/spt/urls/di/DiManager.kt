@@ -13,6 +13,7 @@ fun di() = DiManager.instance
 class DiManager private constructor(){
     companion object {
         val instance: DiManager by lazy {
+            println("===== [DiManager] getInstance lazy")
             DiManager()
         }
     }

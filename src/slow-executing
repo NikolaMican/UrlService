@@ -1,0 +1,12 @@
+2024-03-21 15:11:43.810  INFO 38160 --- [p-nio-80-exec-8] c.s.u.w.DynamicUrlWebServiceController   : header params
+2024-03-21 15:11:44.016  INFO 38160 --- [p-nio-80-exec-8] c.s.u.w.DynamicUrlWebServiceController   :     attributeName: host, value: specializedproteam.com
+2024-03-21 15:11:44.115  INFO 38160 --- [p-nio-80-exec-8] c.s.u.w.DynamicUrlWebServiceController   :     attributeName: upgrade-insecure-requests, value: 1
+2024-03-21 15:11:44.489  INFO 38160 --- [p-nio-80-exec-8] c.s.u.w.DynamicUrlWebServiceController   :     attributeName: accept, value: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+2024-03-21 15:11:44.645  INFO 38160 --- [p-nio-80-exec-8] c.s.u.w.DynamicUrlWebServiceController   :     attributeName: user-agent, value: Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Mobile/15E148 Safari/604.1
+2024-03-21 15:11:44.749  INFO 38160 --- [p-nio-80-exec-8] c.s.u.w.DynamicUrlWebServiceController   :     attributeName: accept-language, value: en-GB,en;q=0.9
+2024-03-21 15:11:45.084  INFO 38160 --- [p-nio-80-exec-8] c.s.u.w.DynamicUrlWebServiceController   :     attributeName: accept-encoding, value: gzip, deflate
+2024-03-21 15:11:45.194  INFO 38160 --- [p-nio-80-exec-8] c.s.u.w.DynamicUrlWebServiceController   :     attributeName: connection, value: keep-alive
+2024-03-21 15:11:45.339  INFO 38160 --- [p-nio-80-exec-8] c.s.u.w.DynamicUrlWebServiceController   :     clientIp: 109.245.207.96
+2024-03-21 15:12:03.018  INFO 38160 --- [p-nio-80-exec-8] c.s.u.w.DynamicUrlWebServiceController   : county: Serbia, city: Belgrade
+2024-03-21 15:12:03.109  INFO 38160 --- [p-nio-80-exec-8] c.s.u.w.DynamicUrlWebServiceController   : process click on url request. Url: http://specializedproteam.com/?YlExmO
+2024-03-21 15:12:44.919  INFO 38160 --- [p-nio-80-exec-8] c.s.u.w.DynamicUrlWebServiceController   : redirect to: http://youtube.com

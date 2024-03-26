@@ -26,6 +26,11 @@ class DynamicUrlService(
 
     fun clickOnDynamicUrl(url: String, browser: String?, platform: String?, isMobilePlatform: Boolean, location: String?): String? {
         val urlId = getUrlId(url)
+
+        if (urlId == null) {
+            LOG.error("urlId is null.")
+            return null
+        }
         val dynamicUrlBean = dynamicUrlDBController.get(urlId)
         if (dynamicUrlBean == null) {
             LOG.error("urlId: $urlId doesn't exist in database")

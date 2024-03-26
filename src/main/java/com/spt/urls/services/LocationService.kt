@@ -79,11 +79,12 @@ java.net.http.HttpConnectTimeoutException: HTTP connect timed out
     fun getLocationUseApacheHttpClient(clientIp: String? = null): LocationApiResponse {
         HttpClients.createDefault().use { client ->
             val httpGetRequest = HttpGet("http://ip-api.com/json/${clientIp ?: ""}")
-            val response = client.execute(httpGetRequest)
-            if (response.statusLine.statusCode == 200) {
-                return EntityUtils.toString(response.entity, StandardCharsets.UTF_8).fromJson()
+            client.execute(httpGetRequest).use { response ->
+                if (response.statusLine.statusCode == 200) {
+                    return EntityUtils.toString(response.entity, StandardCharsets.UTF_8).fromJson()
+                }
+                throw IllegalStateException("failed to get location. StatusCode: ${response.statusLine.statusCode}, Error: " + EntityUtils.toString(response.entity, StandardCharsets.UTF_8))
             }
-            throw IllegalStateException("failed to get location. StatusCode: ${response.statusLine.statusCode}, Error: " + EntityUtils.toString(response.entity, StandardCharsets.UTF_8))
         }
     }
 }
