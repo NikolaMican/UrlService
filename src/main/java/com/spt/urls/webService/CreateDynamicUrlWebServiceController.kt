@@ -1,5 +1,6 @@
 package com.spt.urls.webService
 
+import com.spt.urls.CONF_HTTP_PROTOCOL
 import com.spt.urls.di.di
 import com.spt.urls.extensions.getNormalisedUrl
 import com.spt.urls.extensions.throwExceptionIfRedirectUrlContainsOurDomain

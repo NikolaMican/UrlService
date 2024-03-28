@@ -1,7 +1,7 @@
 package com.spt.urls.extensions
 
-import com.spt.urls.webService.CONF_DOMAIN
-import com.spt.urls.webService.MY_IP_ADDRESS
+import com.spt.urls.CONF_DOMAIN
+import com.spt.urls.MY_IP_ADDRESS
 import org.springframework.web.server.ResponseStatusException
 import org.springframework.http.HttpStatus.BAD_REQUEST
 

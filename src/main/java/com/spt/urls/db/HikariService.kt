@@ -2,9 +2,9 @@ package com.spt.urls.db
 
 import ch.qos.logback.classic.Logger
 import com.spt.urls.logs.TicketLoggerFactory
-import com.spt.urls.webService.CONF_DB_PASS
-import com.spt.urls.webService.CONF_DB_PORT
-import com.spt.urls.webService.CONF_DB_USERNAME
+import com.spt.urls.CONF_DB_PASS
+import com.spt.urls.CONF_DB_PORT
+import com.spt.urls.CONF_DB_USERNAME
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.slf4j.LoggerFactory

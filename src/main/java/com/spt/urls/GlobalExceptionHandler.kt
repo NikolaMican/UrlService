@@ -1,4 +1,4 @@
-package com.spt.urls.webService
+package com.spt.urls
 
 import com.spt.urls.logs.TicketLoggerFactory
 import org.springframework.http.HttpStatus

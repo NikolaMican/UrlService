@@ -6,9 +6,9 @@ import com.spt.urls.dynamicUrlDetails.DynamicUrlDetailsBean
 import com.spt.urls.dynamicUrlDetails.DynamicUrlDetailsDbController
 import com.spt.urls.logs.TicketLoggerFactory
 import com.spt.urls.services.RandomService
-import com.spt.urls.webService.CONF_DOMAIN
-import com.spt.urls.webService.CONF_HTTP_PROTOCOL
-import com.spt.urls.webService.CONF_PORT
+import com.spt.urls.CONF_DOMAIN
+import com.spt.urls.CONF_HTTP_PROTOCOL
+import com.spt.urls.CONF_PORT
 import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
 

@@ -1,6 +1,6 @@
 package com.spt.urls.services
 
-import com.spt.urls.webService.CONF_HTTP_PROTOCOL
+import com.spt.urls.CONF_HTTP_PROTOCOL
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.URL

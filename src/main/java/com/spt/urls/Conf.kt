@@ -1,4 +1,4 @@
-package com.spt.urls.webService
+package com.spt.urls
 
 const val CONF_HTTP_PROTOCOL = "http"
 const val CONF_PORT = 80
