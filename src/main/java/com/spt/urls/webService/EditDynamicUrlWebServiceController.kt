@@ -11,28 +11,29 @@ import org.springframework.web.server.ResponseStatusException
 import java.sql.SQLException
 import java.util.*
 
+data class EditDynamicUrlRequest(val apiKey: String?, val redirectUrl: String?, val urlId: String?)
 
-@Controller
-class EditDynamicUrlWebServiceController {
-    private val LOG = TicketLoggerFactory.getTicketLogger(EditDynamicUrlWebServiceController::class.java)
+@RestController
+class EditDynamicUrlWebServiceRestController {
+    private val LOG = TicketLoggerFactory.getTicketLogger(EditDynamicUrlWebServiceRestController::class.java)
 
     private val dynamicUrlDbController = di().getDynamicUrlDbController()
     private val userDbController = di().getUserDbController()
 
-    @GetMapping("/editDynamicUrl")
+    @PostMapping("/editDynamicUrl")
     @ResponseBody
-    @Throws(SQLException::class)
-    fun editDynamicUrl(
-        @RequestParam(name = "apiKey") apiKey: String?,
-        @RequestParam(name = "urlId") urlId: String,
-        @RequestParam(name = "redirectUrl") redirectUrl: String
+    fun editDynamicUrlPost(
+        @RequestBody request: EditDynamicUrlRequest,
     ) {
-        if (apiKey == null) throw ResponseStatusException(BAD_REQUEST, "Received apiKey is null.")
-        val user = userDbController.getByApiKey(apiKey) ?: throw ResponseStatusException(BAD_REQUEST, "Api key doesn't exist in database.")
+        LOG.info("Processing editDynamicUrlPost request. Received redirectUrl: ${request.redirectUrl}, urlId: ${request.urlId}")
+        if (request.redirectUrl.isNullOrBlank()) throw ResponseStatusException(BAD_REQUEST, "Received redirectUrl is null.")
+        if (request.apiKey.isNullOrBlank()) throw ResponseStatusException(BAD_REQUEST, "Received apiKey is null.")
+        if (request.urlId.isNullOrBlank()) throw ResponseStatusException(BAD_REQUEST, "Received urlId is null.")
 
-        LOG.info("Processing editDynamicUrl request, urlId: $urlId, redirectUrl: $redirectUrl")
-        val dUBean = dynamicUrlDbController.get(user.idUser, urlId) ?: throw ResponseStatusException(BAD_REQUEST, "Required urlId: '$urlId' doesn't exits for user: ${user.username}")
-        dUBean.redirectUrl = redirectUrl.lowercase().getNormalisedUrl()
+        val user = userDbController.getByApiKey(request.apiKey) ?: throw ResponseStatusException(BAD_REQUEST, "Api key doesn't exist in database.")
+
+        val dUBean = dynamicUrlDbController.get(user.idUser, request.urlId) ?: throw ResponseStatusException(BAD_REQUEST, "Required urlId: '${request.urlId}' doesn't exits for user: ${user.username}")
+        dUBean.redirectUrl = request.redirectUrl.lowercase().getNormalisedUrl()
         dUBean.redirectUrl.throwExceptionIfRedirectUrlContainsOurDomain()
         dynamicUrlDbController.edit(dUBean)
 
@@ -41,5 +42,25 @@ class EditDynamicUrlWebServiceController {
 //        val map: HashMap<String, String> = HashMap()
 //        map["urlId"] = "12345"
 //        map["redirectUrl"] = "www.rts.rs"
+    }
+}
+
+
+
+@Controller
+class EditDynamicUrlWebServiceController {
+    private val LOG = TicketLoggerFactory.getTicketLogger(EditDynamicUrlWebServiceController::class.java)
+
+    private val restController = EditDynamicUrlWebServiceRestController()
+
+    @GetMapping("/editDynamicUrlGet")
+    @ResponseBody
+    @Throws(SQLException::class)
+    fun editDynamicUrl(
+        @RequestParam(name = "apiKey") apiKey: String?,
+        @RequestParam(name = "urlId") urlId: String,
+        @RequestParam(name = "redirectUrl") redirectUrl: String
+    ) {
+        restController.editDynamicUrlPost(EditDynamicUrlRequest(apiKey, redirectUrl, urlId))
     }
 }

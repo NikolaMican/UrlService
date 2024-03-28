@@ -27,8 +27,9 @@ class CreateDynamicUrlWebServiceRestController {
         @RequestBody request: CreateDynamicUrlRequest,
     ): CreateDynamicUrlResponse {
         LOG.info("Processing createDynamicUrl request. Received redirectUrl: ${request.redirectUrl}")
-        if (request.redirectUrl == null) throw ResponseStatusException(BAD_REQUEST, "Received redirectUrl is null.")
-        if (request.apiKey == null) throw ResponseStatusException(BAD_REQUEST, "Received apiKey is null.")
+        if (request.redirectUrl.isNullOrBlank()) throw ResponseStatusException(BAD_REQUEST, "Received redirectUrl is null.")
+        if (request.apiKey.isNullOrBlank()) throw ResponseStatusException(BAD_REQUEST, "Received apiKey is null.")
+
         val user = userDbController.getByApiKey(request.apiKey) ?: throw ResponseStatusException(BAD_REQUEST, "Api key doesn't exist in database.")
 
         val normalisedRedirectUrl = request.redirectUrl.lowercase().getNormalisedUrl()
