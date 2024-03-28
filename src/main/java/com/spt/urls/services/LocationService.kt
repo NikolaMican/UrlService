@@ -1,5 +1,6 @@
 package com.spt.urls.services
 
+import com.spt.urls.LocationCache
 import com.spt.urls.extensions.fromJson
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.impl.client.HttpClients
@@ -33,7 +34,8 @@ data class LocationApiResponse(val city: String, val country: String) {
  */
 }
 
-class LocationService {
+class LocationService(private val locationCache: LocationCache) {
+
     /**
      * NOTE:  ip-api.com   limit number of requests per min to 45 for free-package
      *
@@ -77,11 +79,18 @@ java.net.http.HttpConnectTimeoutException: HTTP connect timed out
     }
 
     fun getLocationUseApacheHttpClient(clientIp: String? = null): LocationApiResponse {
+        val cachedLocation = locationCache.getLocation(clientIp ?: "null")
+        if (cachedLocation != null) {
+            return cachedLocation
+        }
+
         HttpClients.createDefault().use { client ->
             val httpGetRequest = HttpGet("http://ip-api.com/json/${clientIp ?: ""}")
             client.execute(httpGetRequest).use { response ->
                 if (response.statusLine.statusCode == 200) {
-                    return EntityUtils.toString(response.entity, StandardCharsets.UTF_8).fromJson()
+                    val locationApiResponse: LocationApiResponse = EntityUtils.toString(response.entity, StandardCharsets.UTF_8).fromJson()
+                    locationCache.setLocation(clientIp ?: "null", locationApiResponse)
+                    return locationApiResponse
                 }
                 throw IllegalStateException("failed to get location. StatusCode: ${response.statusLine.statusCode}, Error: " + EntityUtils.toString(response.entity, StandardCharsets.UTF_8))
             }

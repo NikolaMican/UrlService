@@ -9,8 +9,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
-import java.sql.SQLException
-import java.util.*
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -21,16 +19,15 @@ class ClickOnDynamicUrlWebServiceController {
 
     private val dynamicUrlService = di().getDynamicUrlService()
     private val headerService = di().getHeaderService()
+    private val locationService = di().getLocationService()
 
 
-    @RequestMapping(value = ["/"], method = [RequestMethod.GET])
-    @Throws(SQLException::class)
+    @GetMapping("/")
     fun clickOnDynamicUrl(request: HttpServletRequest, httpServletResponse: HttpServletResponse) {
         clickOnDynamicUrlImpl(request, httpServletResponse, null)
     }
 
-    @RequestMapping(value = ["/{clientCustomPath}"], method = [RequestMethod.GET])
-    @Throws(SQLException::class)
+    @GetMapping("/{clientCustomPath}")
     fun clickOnDynamicUrlClientCustomPath(
         @PathVariable(name = "clientCustomPath")  clientCustomPath: String,
         request: HttpServletRequest, httpServletResponse: HttpServletResponse
@@ -77,21 +74,20 @@ class ClickOnDynamicUrlWebServiceController {
     }
 
     private fun getLocation(clientIpAddress: String?): LocationApiResponse? {
-        return null   // @TODO this is temporary solution
+//        return null   // @TODO this is temporary solution
 
-//        val location =
-//            try {
-//                LOG.info("\t clientIp: $clientIpAddress")
-//                if (clientIpAddress == null) {
-//                    null
-//                } else {
-//                    locationService.getLocationUseApacheHttpClient(clientIpAddress)
-//                }
-//        } catch (e: Exception) {
-//            LOG.error("failed to get location", e)
-//            null
-//        }
-//        return location
+        val location =
+            try {
+                if (clientIpAddress == null) {
+                    null
+                } else {
+                    locationService.getLocationUseApacheHttpClient(clientIpAddress)
+                }
+        } catch (e: Exception) {
+            LOG.error("failed to get location", e)
+            null
+        }
+        return location
     }
 
 

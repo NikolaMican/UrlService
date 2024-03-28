@@ -1,5 +1,6 @@
 package com.spt.urls.di
 
+import com.spt.urls.LocationCache
 import com.spt.urls.db.HikariService
 import com.spt.urls.db.user.UserDbController
 import com.spt.urls.dynamicUrl.DynamicUrlDbController
@@ -21,7 +22,8 @@ class DiManager private constructor(){
 
     private val randomService = RandomService()
     private val headerService = HeaderService()
-    private val locationService = LocationService()
+    private val locationCache = LocationCache()
+    private val locationService = LocationService(locationCache)
     private val hikariService = HikariService()
     private val userDbController = UserDbController(hikariService)
     private val dynamicUrlDbController = DynamicUrlDbController(hikariService)
