@@ -8,17 +8,17 @@ package com.spt.urls.webService
 import com.spt.urls.di.di
 import com.spt.urls.logs.TicketLoggerFactory
 import com.spt.urls.services.LocationApiResponse
+import com.spt.urls.webService.beans.CreateDynamicUrlResponse
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 import org.springframework.web.servlet.ModelAndView
-import com.spt.urls.webService.beans.CreateDynamicUrlResponse
-import java.lang.Exception
 import java.sql.SQLException
 import java.util.*
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
+
 
 @Controller
 class DynamicUrlWebServiceController {
@@ -26,6 +26,7 @@ class DynamicUrlWebServiceController {
 
     private val dynamicUrlService = di().getDynamicUrlService()
     private val dynamicUrlDbController = di().getDynamicUrlDbController()
+    private val userDbController = di().getUserDbController()
     private val headerService = di().getHeaderService()
     private val locationService = di().getLocationService()
 
@@ -33,17 +34,20 @@ class DynamicUrlWebServiceController {
     @ResponseBody
     @Throws(SQLException::class)
     fun createDynamicUrl(
-        @RequestParam(name = "redirectUrl") redirectUrl: String?
+        @RequestParam(name = "apiKey") apiKey: String?,
+        @RequestParam(name = "redirectUrl") redirectUrl: String?,
+        @RequestParam(required = false, name = "clientCustomPath") clientCustomPath: String?
     ): CreateDynamicUrlResponse {
         // request example:   http://localhost:8080/createDynamicUrl?redirectUrl=www.rts.rs
         LOG.info("Processing createDynamicUrl request. Received redirectUrl: $redirectUrl")
-        if (redirectUrl == null) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Received redirectUrl is null.")
-        }
+        if (redirectUrl == null) throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Received redirectUrl is null.")
+        if (apiKey == null) throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Received apiKey is null.")
+        val user = userDbController.getByApiKey(apiKey) ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Api key doesn't exist in database.")
+
         val normalisedRedirectUrl = getNormalisedUrl(redirectUrl.lowercase())
         throwExceptionIfRedirectUrlContainsOurDomain(normalisedRedirectUrl)
 
-        val url = dynamicUrlService.createDynamicUrl(normalisedRedirectUrl)
+        val url = dynamicUrlService.createDynamicUrl(user = user, redirectUrl= normalisedRedirectUrl, clientCustomPath= clientCustomPath ?: "")
         return CreateDynamicUrlResponse(url)
     }
 
@@ -58,11 +62,15 @@ class DynamicUrlWebServiceController {
     @ResponseBody
     @Throws(SQLException::class)
     fun editDynamicUrl(
+        @RequestParam(name = "apiKey") apiKey: String?,
         @RequestParam(name = "urlId") urlId: String,
         @RequestParam(name = "redirectUrl") redirectUrl: String
     ) {
+        if (apiKey == null) throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Received apiKey is null.")
+        val user = userDbController.getByApiKey(apiKey) ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Api key doesn't exist in database.")
+
         LOG.info("Processing editDynamicUrl request, urlId: $urlId, redirectUrl: $redirectUrl")
-        val dUBean = dynamicUrlDbController.get(urlId) ?: throw ResponseStatusException(HttpStatus.NOT_EXTENDED, "Required urlId: '$urlId' doesn't exits")
+        val dUBean = dynamicUrlDbController.get(user.idUser, urlId) ?: throw ResponseStatusException(HttpStatus.NOT_EXTENDED, "Required urlId: '$urlId' doesn't exits for user: ${user.username}")
         dUBean.redirectUrl = getNormalisedUrl(redirectUrl.lowercase())
         throwExceptionIfRedirectUrlContainsOurDomain(dUBean.redirectUrl)
         dynamicUrlDbController.edit(dUBean)
@@ -77,6 +85,23 @@ class DynamicUrlWebServiceController {
     @RequestMapping(value = ["/"], method = [RequestMethod.GET])
     @Throws(SQLException::class)
     fun clickOnDynamicUrl(request: HttpServletRequest, httpServletResponse: HttpServletResponse) {
+        clickOnDynamicUrlImpl(request, httpServletResponse, null)
+    }
+
+    @RequestMapping(value = ["/{clientCustomPath}"], method = [RequestMethod.GET])
+    @Throws(SQLException::class)
+    fun clickOnDynamicUrlClientCustomPath(
+        @PathVariable(name = "clientCustomPath")  clientCustomPath: String,
+        request: HttpServletRequest, httpServletResponse: HttpServletResponse
+    ) {
+        LOG.info("[clickOnDynamicUrlClientCustomPath] clientCustomPath: $clientCustomPath")
+        clickOnDynamicUrlImpl(request, httpServletResponse, clientCustomPath)
+    }
+
+    private fun clickOnDynamicUrlImpl(request: HttpServletRequest,
+                                      httpServletResponse: HttpServletResponse,
+                                      clientCustomPath: String?
+    ) {
         printHeader(request)
 
         val clientIp = request.getHeader("x-forwarded-for") ?: request.remoteAddr
@@ -100,7 +125,7 @@ class DynamicUrlWebServiceController {
         )
         val isMobilePlatform = headerService.isMobile(request.getHeader("user-agent"))
 
-        var redirectUrl = dynamicUrlService.clickOnDynamicUrl(fullUrl, browserName, platformName, isMobilePlatform, county)
+        var redirectUrl = dynamicUrlService.clickOnDynamicUrl(fullUrl, browserName, platformName, isMobilePlatform, county, clientCustomPath)
             ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "There is no redirect url in database for requested url: $fullUrl")
         redirectUrl = getNormalisedUrl(redirectUrl.lowercase())
         throwExceptionIfRedirectUrlContainsOurDomain(redirectUrl)

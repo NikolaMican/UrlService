@@ -1,4 +1,4 @@
-package com.spt.urls.dbConection
+package com.spt.urls.db
 
 import com.spt.urls.logs.TicketLoggerFactory
 import java.sql.SQLException

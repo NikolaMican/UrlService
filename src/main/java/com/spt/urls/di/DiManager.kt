@@ -1,6 +1,7 @@
 package com.spt.urls.di
 
-import com.spt.urls.dbConection.HikariService
+import com.spt.urls.db.HikariService
+import com.spt.urls.db.user.UserDbController
 import com.spt.urls.dynamicUrl.DynamicUrlDbController
 import com.spt.urls.dynamicUrl.DynamicUrlService
 import com.spt.urls.dynamicUrlDetails.DynamicUrlDetailsDbController
@@ -22,9 +23,10 @@ class DiManager private constructor(){
     private val headerService = HeaderService()
     private val locationService = LocationService()
     private val hikariService = HikariService()
+    private val userDbController = UserDbController(hikariService)
     private val dynamicUrlDbController = DynamicUrlDbController(hikariService)
     private val dynamicUrlDetailsDBController = DynamicUrlDetailsDbController(hikariService)
-    private val dynamicUrlService = DynamicUrlService(dynamicUrlDbController, dynamicUrlDetailsDBController, randomService)
+    private val dynamicUrlService = DynamicUrlService(dynamicUrlDbController, dynamicUrlDetailsDBController, userDbController, randomService)
 
 
 
@@ -33,6 +35,7 @@ class DiManager private constructor(){
     fun getLocationService(): LocationService = locationService
     fun getHikariService(): HikariService = hikariService
     fun getDynamicUrlService(): DynamicUrlService = dynamicUrlService
+    fun getUserDbController(): UserDbController = userDbController
     fun getDynamicUrlDbController(): DynamicUrlDbController = dynamicUrlDbController
     fun getDynamicUrlDetailsDbController(): DynamicUrlDetailsDbController = dynamicUrlDetailsDBController
 }

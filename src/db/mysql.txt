@@ -9,7 +9,7 @@ logovanje:
 list running services:
 	brew services list
 
-list timer-a: 
+list timer-a:
     systemctl list-timers
 	
 

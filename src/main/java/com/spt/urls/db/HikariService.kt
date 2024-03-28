@@ -1,4 +1,4 @@
-package com.spt.urls.dbConection
+package com.spt.urls.db
 
 import ch.qos.logback.classic.Logger
 import com.spt.urls.logs.TicketLoggerFactory

@@ -1,15 +1,27 @@
 
 package com.spt.urls.dynamicUrlDetails
 
-import com.spt.urls.dbConection.BaseDbController
-import com.spt.urls.dbConection.HikariService
+import com.spt.urls.db.BaseDbController
+import com.spt.urls.db.HikariService
 import java.sql.Statement
 import java.sql.Timestamp
 
-/**
- *
- * @author Nikola Micanovic
- */
+data class DynamicUrlDetailsBean(
+    var idDynamicUrlDetails: Int = 0,
+    var fkIdDynamicUrl: Int = 0,
+    var time: Long = 0,
+    var location: String? = null,
+    var browser: String? = null,
+    var platform: String? = null,
+    var isMobilePlatform: Boolean = false
+
+) {
+    constructor(fkIdDynamicUrl: Int, time: Long, location: String?, browser: String?, platform: String?, isMobilePlatform: Boolean):
+            this(0, fkIdDynamicUrl, time, location, browser, platform, isMobilePlatform)
+}
+
+
+
 class DynamicUrlDetailsDbController(
     hikariService: HikariService
 ): BaseDbController(hikariService) {
