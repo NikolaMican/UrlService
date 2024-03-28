@@ -2,6 +2,7 @@ package com.spt.urls.services
 
 import com.spt.urls.LocationCache
 import com.spt.urls.extensions.fromJson
+import com.spt.urls.logs.TicketLoggerFactory
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.impl.client.HttpClients
 import org.apache.http.util.EntityUtils
@@ -34,7 +35,11 @@ data class LocationApiResponse(val city: String, val country: String) {
  */
 }
 
-class LocationService(private val locationCache: LocationCache) {
+class LocationService(
+    private val locationCache: LocationCache
+) {
+
+    private val LOG = TicketLoggerFactory.getTicketLogger(LocationService::class.java)
 
     /**
      * NOTE:  ip-api.com   limit number of requests per min to 45 for free-package
@@ -84,6 +89,7 @@ java.net.http.HttpConnectTimeoutException: HTTP connect timed out
             return cachedLocation
         }
 
+        LOG.info("Performing remote call to get location for ipAddress: $clientIp")
         HttpClients.createDefault().use { client ->
             val httpGetRequest = HttpGet("http://ip-api.com/json/${clientIp ?: ""}")
             client.execute(httpGetRequest).use { response ->
