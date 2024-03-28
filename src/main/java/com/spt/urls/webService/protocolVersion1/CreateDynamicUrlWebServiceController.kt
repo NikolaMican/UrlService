@@ -1,4 +1,4 @@
-package com.spt.urls.webService
+package com.spt.urls.webService.protocolVersion1
 
 import com.spt.urls.CONF_HTTP_PROTOCOL
 import com.spt.urls.di.di
@@ -21,7 +21,7 @@ class CreateDynamicUrlWebServiceRestController {
     private val dynamicUrlService = di().getDynamicUrlService()
     private val userDbController = di().getUserDbController()
 
-    @PostMapping("/createDynamicUrl")
+    @PostMapping("/v1/createDynamicUrl")
     @ResponseBody
     fun createDynamicUrlPost(
         @RequestBody request: CreateDynamicUrlRequest,
@@ -47,7 +47,7 @@ class CreateDynamicUrlWebServiceController {
 
     private val restController = CreateDynamicUrlWebServiceRestController()
 
-    @GetMapping("/createDynamicUrlGet") // oznacava da li ce uci u metodu
+    @GetMapping("/v1/createDynamicUrlGet") // oznacava da li ce uci u metodu
     @ResponseBody
     fun createDynamicUrlGet(
         @RequestParam(name = "apiKey") apiKey: String?,

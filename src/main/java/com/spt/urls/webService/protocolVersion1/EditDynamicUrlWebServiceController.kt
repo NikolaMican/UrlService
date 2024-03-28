@@ -1,4 +1,4 @@
-package com.spt.urls.webService
+package com.spt.urls.webService.protocolVersion1
 
 import com.spt.urls.di.di
 import com.spt.urls.extensions.getNormalisedUrl
@@ -20,7 +20,7 @@ class EditDynamicUrlWebServiceRestController {
     private val dynamicUrlDbController = di().getDynamicUrlDbController()
     private val userDbController = di().getUserDbController()
 
-    @PostMapping("/editDynamicUrl")
+    @PostMapping("/v1/editDynamicUrl")
     @ResponseBody
     fun editDynamicUrlPost(
         @RequestBody request: EditDynamicUrlRequest,
@@ -53,7 +53,7 @@ class EditDynamicUrlWebServiceController {
 
     private val restController = EditDynamicUrlWebServiceRestController()
 
-    @GetMapping("/editDynamicUrlGet")
+    @GetMapping("/v1/editDynamicUrlGet")
     @ResponseBody
     @Throws(SQLException::class)
     fun editDynamicUrl(
