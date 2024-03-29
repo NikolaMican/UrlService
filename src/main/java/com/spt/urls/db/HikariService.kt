@@ -27,7 +27,7 @@ class HikariService {
                 username = CONF_DB_USERNAME
                 password = CONF_DB_PASS
                 minimumIdle = 10
-                maximumPoolSize = 30
+                maximumPoolSize = 20
                 connectionTimeout = 5_000   // This property controls the maximum number of milliseconds that a client (that's you) will wait for a connection from the pool.
                 addDataSourceProperty("cachePrepStmts", "true")
                 addDataSourceProperty("prepStmtCacheSize", "250")

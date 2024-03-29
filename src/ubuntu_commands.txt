@@ -1,0 +1,51 @@
+
+// ==================== CPU I MEMORIJA bez opterecenja:             CPU: 2%,        RAM: 725MB/950MB
+// ==================== CPU I MEMORIJA pod opterecenjem 50 req/s:   CPU: max 15%,   RAM: 725MB/950MB (slicno kako i kada nije opterecen)
+
+
+
+
+// kao top komanda samo bolje. Izlistava procese kao i koliko zauzimaju memorije, CPU, PID, ukupno koliko ko uzima CPU, MEMORIJE, .....
+htop
+
+
+
+
+mysql server start/stop/restart:			ubuntu
+	brew services start mysql			systemctl start mysql.service,   systemctl status mysql.service
+	brew services stop mysql
+	brew services restart mysql
+							systemctl enable mysql  - enable autostart mysql on ubuntu
+
+// ================== pravljenje systemctl servisa
+  1. dodati fajl u /etc/systemd/system.   pr /etc/systemd/system/dynamic_url.service    (u ovom fajlu se moze definisati putanja do log fajla gde zelis da idu logovi)
+  2. pozvati  systemctl daemon-reload da ucita promene. Ovo se mora pozvati svaki put kada se radi promena dynamic_url.service fajla
+  3. operacije:
+        systemctl start dynamic_url
+        systemctl stop dynamic_url
+        systemctl status dynamic_url
+  4. ukoliko zelimo da se servis sam startuje nakon restarta servera treba izvrsiti komandu  systemctl enable dynamic_url
+
+
+
+
+
+// ===================================================================================================================================
+//      BITNO JE DA SE ISKLJUCE SVI UPDATE-i NA UBUNTU. ONI KADA SE POKRENU UGUSE SERVER (UZMU PROCESOR I MEMORIJU) SLEDECIM KOMANDAMA MOZE SE TO URADITI.
+//      vishe na: https://superuser.com/questions/1327884/how-to-disable-daily-upgrade-and-clean-on-ubuntu-16-04
+// ===================================================================================================================================
+list timer-a:
+    systemctl list-timers
+stop/disable timers
+    systemctl stop <timer>              // pr. systemctl stop fwupd-refresh.timer
+    systemctl disable <timer>           // pr. systemctl disable fwupd-refresh.timer
+    systemctl daemon-reload
+
+islistava procese koji slusaju na nekom portu:
+    lsof -i -P -n           // moze se raditi i grep na ovu komandu pr.  lsof -i -P -n | grep LISTEN  gde se dobiju samo procesi koji slusaju na nekom portu
+    Moze se kreirati i alias za ovu komandu pr.   alias lp="lsof -i -P -n"   // lp <=> list port
+
+
+
+// ============== POSTMAN =================
+    testiranje sa vishe thread-ova:   https://blog.postman.com/postman-api-performance-testing/
