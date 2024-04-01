@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
     <Appenders>
-        <RollingFile 
-            name="MyFile" 
-            fileName="logs/ticket.log"
-            filePattern="logs/ticket.log.%d{dd-MM-yyyy}.log">
+        <RollingFile name="MyFile" fileName="logs/dynamic_url.log" filePattern="logs/dynamic_url.log.%d{dd-MM-yyyy}.log">
             <PatternLayout pattern="%d %-5level[ses:%X{sessionId} uuid:%X{uuid} thread:%t] %logger{0} - %msg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
@@ -15,13 +12,20 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Root level="ERROR">
+        <Root level="ERROR"> 
             <AppenderRef ref="MyFile"/>
             <AppenderRef ref="Console"/>
         </Root>
-        <logger name="com.tickets" level="DEBUG" additivity="false">
+        <logger name="com.spt.urls" level="DEBUG" additivity="false">
             <AppenderRef ref="MyFile"/>
-            <AppenderRef ref="Console"/>
+<!--            <AppenderRef ref="Console"/>-->
         </logger>
+
+
+
+<!--        <logger name="com.zaxxer.hikari" level="DEBUG" additivity="false">-->
+<!--            <AppenderRef ref="MyFile"/>-->
+<!--            <AppenderRef ref="Console"/>-->
+<!--        </logger>-->
     </Loggers>
 </Configuration>

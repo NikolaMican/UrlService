@@ -1,6 +1,6 @@
 
-// ==================== CPU I MEMORIJA bez opterecenja:             CPU: 2%,        RAM: 725MB/950MB
-// ==================== CPU I MEMORIJA pod opterecenjem 50 req/s:   CPU: max 15%,   RAM: 725MB/950MB (slicno kako i kada nije opterecen)
+// ==================== CPU I MEMORIJA bez opterecenja:             CPU: 2%,        RAM: 725MB/950MB  (mysql 40%, java 20%)
+// ==================== CPU I MEMORIJA pod opterecenjem 50 req/s:   CPU: max 15%,   RAM: 760MB/950MB  (mysql 44%, java 20%). Ovih 4% sto je se povecao mysql je zapravo tih 40MB razlike
 
 
 
@@ -18,7 +18,7 @@ mysql server start/stop/restart:			ubuntu
 							systemctl enable mysql  - enable autostart mysql on ubuntu
 
 // ================== pravljenje systemctl servisa
-  1. dodati fajl u /etc/systemd/system.   pr /etc/systemd/system/dynamic_url.service    (u ovom fajlu se moze definisati putanja do log fajla gde zelis da idu logovi)
+  1. dodati fajl u /etc/systemd/system/<tvoj_service>   pr /etc/systemd/system/dynamic_url.service    (u ovom fajlu se moze definisati putanja do log fajla gde zelis da idu console logovi)
   2. pozvati  systemctl daemon-reload da ucita promene. Ovo se mora pozvati svaki put kada se radi promena dynamic_url.service fajla
   3. operacije:
         systemctl start dynamic_url
@@ -39,11 +39,12 @@ list timer-a:
 stop/disable timers
     systemctl stop <timer>              // pr. systemctl stop fwupd-refresh.timer
     systemctl disable <timer>           // pr. systemctl disable fwupd-refresh.timer
-    systemctl daemon-reload
+    systemctl daemon-reload      // BITNO - ponovo ucitava promenjenu konfiguraciju
 
 islistava procese koji slusaju na nekom portu:
     lsof -i -P -n           // moze se raditi i grep na ovu komandu pr.  lsof -i -P -n | grep LISTEN  gde se dobiju samo procesi koji slusaju na nekom portu
-    Moze se kreirati i alias za ovu komandu pr.   alias lp="lsof -i -P -n"   // lp <=> list port
+    Moze se kreirati i alias za ovu komandu, dodati u ~/.bashrc    pr.   alias lp="lsof -i -P -n"   // lp <=> list port
+                                                  Bitno je da bi se promene primenile, nakon dodavanja komande u fajl izvrisiti   . ~/.bashrc  (there should be a space between the . and ~/.bashrc.
 
 
 

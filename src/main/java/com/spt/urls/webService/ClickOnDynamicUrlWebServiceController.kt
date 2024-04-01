@@ -92,12 +92,11 @@ class ClickOnDynamicUrlWebServiceController {
 
 
     private fun printHeader(request: HttpServletRequest) {
-        LOG.debug("header params - debug")
-        LOG.info("header params")
+        LOG.debug("header params")
         val header = request.headerNames
         while (header.hasMoreElements()) {
             val attributeName = header.nextElement()
-            LOG.info("\t attributeName: "+ attributeName + ", value: " + request.getHeader(attributeName))
+            LOG.debug("\t attributeName: "+ attributeName + ", value: " + request.getHeader(attributeName))
         }
     }
 }
