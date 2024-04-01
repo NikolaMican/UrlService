@@ -2,17 +2,17 @@
 <Configuration>
     <Appenders>
         <RollingFile name="MyFile" fileName="logs/dynamic_url.log" filePattern="logs/dynamic_url.log.%d{dd-MM-yyyy}.log">
-            <PatternLayout pattern="%d %-5level[ses:%X{sessionId} uuid:%X{uuid} thread:%t] %logger{0} - %msg%n"/>
+            <PatternLayout pattern="%d %-5level[thread:%t] %logger{0} - %msg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
             </Policies>
         </RollingFile>
         <Console name="Console">
-            <PatternLayout pattern="%d %-5level[ses:%X{sessionId} uuid:%X{uuid} thread:%t] %logger{0} - %msg%n"/>
+            <PatternLayout pattern="%d %-5level[thread:%t] %logger{0} - %msg%n"/>
         </Console>
     </Appenders>
     <Loggers>
-        <Root level="ERROR"> 
+        <Root level="ERROR">
             <AppenderRef ref="MyFile"/>
             <AppenderRef ref="Console"/>
         </Root>

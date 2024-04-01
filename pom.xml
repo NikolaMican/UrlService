@@ -31,7 +31,11 @@
             </snapshots>
         </repository>
     </repositories>-->
-    
+
+
+
+    <!-- ============== NOTE: if you need to print dependency tree you can do it calling:   mvn dependency:tree   -->
+
     <dependencies>
         <dependency>
             <groupId>mysql</groupId>
