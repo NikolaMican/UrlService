@@ -34,7 +34,11 @@
 
 
 
-    <!-- ============== NOTE: if you need to print dependency tree you can do it calling:   mvn dependency:tree   -->
+    <!-- =============================================================================================
+        NOTE: if you need to print dependency tree you can do it calling:   mvn dependency:tree
+        Also, you can see dependency tree using IntelliJ option as it described on
+        https://www.jetbrains.com/guide/java/tutorials/analyzing-dependencies/dependency-analyzer/
+        ============================================================================================= -->
 
     <dependencies>
         <dependency>
@@ -92,6 +96,21 @@
             <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>
+
+
+
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
+            <version>3.4.0</version>
+        </dependency>
+
+
     </dependencies>    
     
     <build>

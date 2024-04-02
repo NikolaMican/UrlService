@@ -53,7 +53,7 @@ class DynamicUrlService(
         dynamicUrlBean.numOfClicks += 1
         dynamicUrlDBController.edit(dynamicUrlBean)
 
-        // every time when new click happend, insert new line to 'DynamicUrlDetails' table
+        // every time when new click happened, insert new line to 'DynamicUrlDetails' table
         val dynamicUrlId = dynamicUrlBean.idDynamicUrl
         val dudBean = DynamicUrlDetailsBean(dynamicUrlId, System.currentTimeMillis(), location, browser, platform, isMobilePlatform)
         dynamicUrlDetailsDBController.insert(dudBean)
@@ -83,7 +83,8 @@ class DynamicUrlService(
         }
         url += "/?$urlId"
 
-        val dynamicUrlBean = DynamicUrlBean(user.idUser, urlId, redirectUrl!!, 0)
+        val dynamicUrlTemplate = url.replace(CONF_DOMAIN, "<DOMAIN>")
+        val dynamicUrlBean = DynamicUrlBean(user.idUser, dynamicUrlTemplate, urlId, redirectUrl!!, 0)
         dynamicUrlDBController.insert(dynamicUrlBean)
 
         // http://localhost:8080/?21356
