@@ -1,5 +1,7 @@
 package com.spt.urls
 
+
+
 const val CONF_HTTP_PROTOCOL = "http"
 const val CONF_PORT = 80
 const val CONF_DOMAIN = "specializedproteam.com"
