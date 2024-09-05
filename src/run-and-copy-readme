@@ -2,7 +2,9 @@
        mvn clean install  (u root folderu projekta:)
 
 2. slanje fajla na server:
-        scp -i /Users/ibc/Desktop/dynamic_url/serversshkey/id_rsa_dynamic_url /Users/ibc/Desktop/all/prog/java/UrlService/target/UrlService-1.0-SNAPSHOT.jar root@165.22.28.99:/root/dynamic_url/
+        scp -i /Users/ibc/Desktop/dynamic_url/serversshkey/id_rsa_dynamic_url /Users/ibc/Desktop/all/prog/java/UrlService/target/UrlService-1.0-SNAPSHOT.jar root@95.169.204.23:/root/dynamic_url/
+        scp /Users/ibc/Desktop/all/prog/java/UrlService/target/UrlService-1.0-SNAPSHOT.jar root@95.169.204.23:/root/dynamic_url/
+
 
 3. Napravio sam i systemctl verziju za startovanje pa je moguce da se radi startovanje:
         systemmctl start dynamic_url     (console logovi ce biti preusmereni u /root/dynamic_url/logs/dynamic_url.log. Isti fajl je podesen i u log4j za logove)

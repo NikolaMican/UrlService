@@ -40,6 +40,7 @@ class ClickOnDynamicUrlWebServiceController {
                                       httpServletResponse: HttpServletResponse,
                                       clientCustomPath: String?
     ) {
+        LOG.info("[clickOnDynamicUrlImpl] Receiving click dynamic url request.")
         printHeader(request)
 
         val clientIp = request.getHeader("x-forwarded-for") ?: request.remoteAddr
