@@ -57,7 +57,7 @@ class DynamicUrlService(
         val dynamicUrlId = dynamicUrlBean.idDynamicUrl
         val dudBean = DynamicUrlDetailsBean(dynamicUrlId, System.currentTimeMillis(), location, browser, platform, isMobilePlatform)
         dynamicUrlDetailsDBController.insert(dudBean)
-        return dynamicUrlBean.redirectUrl
+        return dynamicUrlBean.destinationUrl
     }
 
     private fun getUrlId(url: String): String? {
@@ -66,7 +66,9 @@ class DynamicUrlService(
         return if (lastPrefixIndex == -1) null else url.substring(lastPrefixIndex + 1)
     }
 
-    fun createDynamicUrl(user: UserBean, redirectUrl: String?, clientCustomPath: String = ""): String {
+    fun getDynamicUrls(user: UserBean): List<DynamicUrlBean> = dynamicUrlDBController.get4UserId(user.idUser)
+
+    fun createDynamicUrl(user: UserBean, alias: String, redirectUrl: String?, clientCustomPath: String = ""): DynamicUrl {
         val hasClientCustomPath = clientCustomPath.isNotEmpty()
         val urlId = randomService.randomString(if (hasClientCustomPath) URL_ID_LENGTH_CLIENT_CUSTOM_PATH else URL_ID_LENGTH)
 
@@ -84,10 +86,12 @@ class DynamicUrlService(
         url += "/?$urlId"
 
         val dynamicUrlTemplate = url.replace(CONF_DOMAIN, "<DOMAIN>")
-        val dynamicUrlBean = DynamicUrlBean(user.idUser, dynamicUrlTemplate, urlId, redirectUrl!!, 0)
+        val dynamicUrlBean = DynamicUrlBean(user.idUser, alias = alias, dynamicUrlTemplate, urlId, redirectUrl!!, 0)
         dynamicUrlDBController.insert(dynamicUrlBean)
 
         // http://localhost:8080/?21356
-        return url
+        return DynamicUrl(urlId = urlId, shortUrl = url)
     }
 }
+
+data class DynamicUrl(val urlId: String, val shortUrl: String)

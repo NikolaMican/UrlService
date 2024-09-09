@@ -21,9 +21,10 @@ INSERT INTO user(username, api_key, is_test_user) VALUES ('test' ,'222', 1);
 CREATE TABLE if not exists `dynamic_url` (
   `id_dynamic_url` int NOT NULL AUTO_INCREMENT,
   `fk_id_user` int NOT NULL,
+  `alias` varchar(255) DEFAULT NULL,
   `dynamic_url_template` varchar(255) DEFAULT NULL,
   `url_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
-  `redirect_url` varchar(512) DEFAULT NULL,
+  `destination_url` varchar(512) DEFAULT NULL,
   `num_of_clicks` int DEFAULT NULL,
   PRIMARY KEY (`id_dynamic_url`),
   UNIQUE KEY `url_id` (`url_id`),
@@ -45,4 +46,5 @@ CREATE TABLE if not exists `dynamic_url_details` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
-
+drop table dynamic_url_details;
+drop table dynamic_url;

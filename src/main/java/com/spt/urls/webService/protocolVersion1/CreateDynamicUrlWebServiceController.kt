@@ -2,6 +2,7 @@ package com.spt.urls.webService.protocolVersion1
 
 import com.spt.urls.CONF_HTTP_PROTOCOL
 import com.spt.urls.di.di
+import com.spt.urls.dynamicUrl.DynamicUrlBean
 import com.spt.urls.extensions.getNormalisedUrl
 import com.spt.urls.extensions.throwExceptionIfRedirectUrlContainsOurDomain
 import com.spt.urls.logs.TicketLoggerFactory
@@ -11,8 +12,8 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 import org.springframework.web.servlet.ModelAndView
 
-data class CreateDynamicUrlRequest(val apiKey: String?, val redirectUrl: String?, val clientCustomPath: String?)
-data class CreateDynamicUrlResponse(var url: String)
+data class CreateDynamicUrlRequest(val apiKey: String?, val alias: String?, val destinationUrl: String?, val clientCustomPath: String?)
+data class CreateDynamicUrlResponse(val urlId: String, val alias: String?, val shortUrl: String)
 
 @RestController
 class CreateDynamicUrlWebServiceRestController {
@@ -26,17 +27,18 @@ class CreateDynamicUrlWebServiceRestController {
     fun createDynamicUrlPost(
         @RequestBody request: CreateDynamicUrlRequest,
     ): CreateDynamicUrlResponse {
-        LOG.info("Processing createDynamicUrl request. Received redirectUrl: ${request.redirectUrl}")
-        if (request.redirectUrl.isNullOrBlank()) throw ResponseStatusException(BAD_REQUEST, "Received redirectUrl is null.")
+        LOG.info("Processing createDynamicUrl request. Received destinationUrl: ${request.destinationUrl}")
+        if (request.destinationUrl.isNullOrBlank()) throw ResponseStatusException(BAD_REQUEST, "Received destinationUrl is null.")
         if (request.apiKey.isNullOrBlank()) throw ResponseStatusException(BAD_REQUEST, "Received apiKey is null.")
+        if (request.alias.isNullOrBlank()) throw ResponseStatusException(BAD_REQUEST, "Received alias is null.")
 
         val user = userDbController.getByApiKey(request.apiKey) ?: throw ResponseStatusException(BAD_REQUEST, "Api key doesn't exist in database.")
 
-        val normalisedRedirectUrl = request.redirectUrl.lowercase().getNormalisedUrl()
+        val normalisedRedirectUrl = request.destinationUrl.lowercase().getNormalisedUrl()
         normalisedRedirectUrl.throwExceptionIfRedirectUrlContainsOurDomain()
 
-        val url = dynamicUrlService.createDynamicUrl(user = user, redirectUrl= normalisedRedirectUrl, clientCustomPath= request.clientCustomPath ?: "")
-        return CreateDynamicUrlResponse(url)
+        val dynamicUrl = dynamicUrlService.createDynamicUrl(user = user, alias = request.alias, redirectUrl= normalisedRedirectUrl, clientCustomPath= request.clientCustomPath ?: "")
+        return CreateDynamicUrlResponse(urlId = dynamicUrl.urlId, alias = request.alias, shortUrl = dynamicUrl.shortUrl)
     }
 }
 
@@ -51,10 +53,11 @@ class CreateDynamicUrlWebServiceController {
     @ResponseBody
     fun createDynamicUrlGet(
         @RequestParam(name = "apiKey") apiKey: String?,
-        @RequestParam(name = "redirectUrl") redirectUrl: String?,
+        @RequestParam(name = "alias") alias: String?,
+        @RequestParam(name = "destinationUrl") destinationUrl: String?,
         @RequestParam(required = false, name = "clientCustomPath") clientCustomPath: String?
     ): CreateDynamicUrlResponse {
-        return restController.createDynamicUrlPost(CreateDynamicUrlRequest(apiKey, redirectUrl, clientCustomPath))
+        return restController.createDynamicUrlPost(CreateDynamicUrlRequest(apiKey, alias, destinationUrl, clientCustomPath))
     }
 
 
