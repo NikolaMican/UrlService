@@ -1,7 +1,9 @@
 package com.spt.urls.webService.protocolVersion1
 
+import com.spt.urls.CONF_DOMAIN
 import com.spt.urls.di.di
 import com.spt.urls.dynamicUrl.DynamicUrlBean
+import com.spt.urls.extensions.getUrlWithDomain
 import com.spt.urls.logs.TicketLoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
@@ -10,7 +12,12 @@ import org.springframework.http.HttpStatus.BAD_REQUEST
 
 
 data class GetDynamicUrlRequest(val apiKey: String?=null)
-data class GetDynamicUrlResponse(val urls: List<DynamicUrlBean>)
+data class DynamicUrlResponse(val alias: String,//"test-yahoo",
+                              val urlId: String, //"Dn1bkkLi",
+                              val shortUrl: String, //"<DOMAIN>/?Dn1bkkLi",
+                                val destinationUrl: String, //"http://yahoo.com",
+                                val numOfClicks: Int)
+data class GetDynamicUrlResponse(val urls: List<DynamicUrlResponse>)
 
 @RestController
 open class GetDynamicUrlWebServiceRestController {
@@ -29,7 +36,13 @@ open class GetDynamicUrlWebServiceRestController {
 
         val user = userDbController.getByApiKey(request.apiKey) ?: throw ResponseStatusException(BAD_REQUEST, "Api key doesn't exist in database.")
 
-        val urls = dynamicUrlService.getDynamicUrls(user = user)
+        val urls = dynamicUrlService.getDynamicUrls(user = user).map {
+            DynamicUrlResponse(alias = it.alias, urlId = it.urlId,
+                                destinationUrl = it.destinationUrl, numOfClicks = it.numOfClicks,
+                                shortUrl = it.dynamicUrlTemplate.getUrlWithDomain()
+
+            )
+        }
         return GetDynamicUrlResponse(urls)
     }
 }

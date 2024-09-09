@@ -6,6 +6,7 @@ import com.google.zxing.client.j2se.MatrixToImageWriter
 import com.google.zxing.qrcode.QRCodeWriter
 import com.spt.urls.CONF_DOMAIN
 import com.spt.urls.di.di
+import com.spt.urls.extensions.getUrlWithDomain
 import com.spt.urls.logs.TicketLoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.http.HttpStatus.BAD_REQUEST
@@ -54,7 +55,7 @@ class QrCodeWebServiceRestController {
         val user = userDbController.getByApiKey(request.apiKey) ?: throw ResponseStatusException(BAD_REQUEST, "Api key doesn't exist in database.")
         val dUBean = dynamicUrlDbController.get(user.idUser, request.urlId) ?: throw ResponseStatusException(BAD_REQUEST, "Required urlId: '${request.urlId}' doesn't exits for user: ${user.username}")
 
-        return ResponseEntity(generateQRCodeImage(dUBean.dynamicUrlTemplate.replace("<DOMAIN>", CONF_DOMAIN), width, height), OK)
+        return ResponseEntity(generateQRCodeImage(dUBean.dynamicUrlTemplate.getUrlWithDomain(), width, height), OK)
     }
 
 

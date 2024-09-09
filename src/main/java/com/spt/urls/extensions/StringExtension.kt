@@ -18,3 +18,5 @@ fun String.throwExceptionIfRedirectUrlContainsOurDomain() {
         throw ResponseStatusException(BAD_REQUEST, "It\'s not allowed to use our domain links in redirectUrl: $this. We prevent infinity loop with it.")
     }
 }
+
+fun String.getUrlWithDomain(): String = this.replace("<DOMAIN>", CONF_DOMAIN)
