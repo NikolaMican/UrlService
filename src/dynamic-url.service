@@ -1,0 +1,14 @@
+# NOTE: this file needs to be saved under /etc/systemd/system/dynamic-url.service
+
+[Unit]
+Description=Dynamic url service
+After=network.target
+
+[Service]
+User=root
+Group=root
+WorkingDirectory=/root/dynamic_url
+ExecStart=java -jar UrlService-1.0-SNAPSHOT.jar
+
+[Install]
+WantedBy=multi-user.target
