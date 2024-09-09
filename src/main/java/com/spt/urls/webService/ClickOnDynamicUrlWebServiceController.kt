@@ -40,6 +40,7 @@ class ClickOnDynamicUrlWebServiceController {
                                       httpServletResponse: HttpServletResponse,
                                       clientCustomPath: String?
     ) {
+        LOG.info("[clickOnDynamicUrlImpl] Receiving click dynamic url request.")
         printHeader(request)
 
         val clientIp = request.getHeader("x-forwarded-for") ?: request.remoteAddr
@@ -92,12 +93,11 @@ class ClickOnDynamicUrlWebServiceController {
 
 
     private fun printHeader(request: HttpServletRequest) {
-        LOG.debug("header params - debug")
-        LOG.info("header params")
+        LOG.debug("header params")
         val header = request.headerNames
         while (header.hasMoreElements()) {
             val attributeName = header.nextElement()
-            LOG.info("\t attributeName: "+ attributeName + ", value: " + request.getHeader(attributeName))
+            LOG.debug("\t attributeName: "+ attributeName + ", value: " + request.getHeader(attributeName))
         }
     }
 }

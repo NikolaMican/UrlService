@@ -10,7 +10,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-parent</artifactId>
 <!--            <version>3.0.0</version>-->
-            <version>2.6.4</version>
+            <version>2.7.9</version>
             <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <properties>
@@ -31,13 +31,20 @@
             </snapshots>
         </repository>
     </repositories>-->
-    
+
+
+
+    <!-- =============================================================================================
+        NOTE: if you need to print dependency tree you can do it calling:   mvn dependency:tree
+        Also, you can see dependency tree using IntelliJ option as it described on
+        https://www.jetbrains.com/guide/java/tutorials/analyzing-dependencies/dependency-analyzer/
+        ============================================================================================= -->
+
     <dependencies>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-<!--            <version>8.0.31</version>-->
-            <version>5.1.45</version>
+            <version>8.0.31</version>
         </dependency>
         <dependency>
             <groupId>com.zaxxer</groupId>
@@ -49,13 +56,21 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web-services</artifactId>
             <!--<version>3.0.0</version>-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <!-- seems 'logback' doesn't work with slf4j. So we have to remove 'logback' dependencies at all-->
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
-        
-       
         <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter</artifactId>
-                <!--<version>3.0.0</version>-->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
 
         <dependency>
@@ -81,6 +96,21 @@
             <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>
+
+
+
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
+            <version>3.4.0</version>
+        </dependency>
+
+
     </dependencies>    
     
     <build>

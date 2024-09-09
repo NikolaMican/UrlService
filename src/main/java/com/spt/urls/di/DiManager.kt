@@ -6,6 +6,7 @@ import com.spt.urls.db.user.UserDbController
 import com.spt.urls.dynamicUrl.DynamicUrlDbController
 import com.spt.urls.dynamicUrl.DynamicUrlService
 import com.spt.urls.dynamicUrlDetails.DynamicUrlDetailsDbController
+import com.spt.urls.extensions.logTime
 import com.spt.urls.services.HeaderService
 import com.spt.urls.services.LocationService
 import com.spt.urls.services.RandomService
@@ -15,7 +16,7 @@ fun di() = DiManager.instance
 class DiManager private constructor(){
     companion object {
         val instance: DiManager by lazy {
-            println("===== [DiManager] getInstance lazy")
+            println(logTime() + " ===== [DiManager] getInstance lazy")
             DiManager()
         }
     }

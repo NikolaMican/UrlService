@@ -1,14 +1,15 @@
 package com.spt.urls.db
 
-import ch.qos.logback.classic.Logger
 import com.spt.urls.logs.TicketLoggerFactory
 import com.spt.urls.CONF_DB_PASS
 import com.spt.urls.CONF_DB_PORT
 import com.spt.urls.CONF_DB_USERNAME
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import org.slf4j.LoggerFactory
 
+/**
+ * NOTE: to enable Hikari logging please uncomment 'Hikari' logger in log4j.xml file
+ */
 class HikariService {
     private val LOG = TicketLoggerFactory.getTicketLogger(HikariService::class.java)
 
@@ -20,8 +21,7 @@ class HikariService {
     fun getHikariInstance(): HikariDataSource {
         if (hikariDataSource == null) {
             val databaseUrl: String = getDatabaseUrl()
-            LOG.info("setup database.  DatabaseUrl: $databaseUrl")
-            LOG.debug("===================== setup database url: $databaseUrl")
+            LOG.debug("setup database.  DatabaseUrl: $databaseUrl")
             val hikariConfig = HikariConfig().apply {
                 jdbcUrl = databaseUrl
                 username = CONF_DB_USERNAME
@@ -35,16 +35,9 @@ class HikariService {
 //                leakDetectionThreshold = 3000  // Hikari will log query if it takes more the 3s in this case
             }
 
-//            enableLogging()
-
             hikariDataSource = HikariDataSource(hikariConfig)
         }
         return hikariDataSource!!
-    }
-
-    private fun enableLogging() {
-        val hikariLogger = LoggerFactory.getLogger("com.zaxxer.hikari") as Logger
-        hikariLogger.level = ch.qos.logback.classic.Level.TRACE
     }
 
     private fun getDatabaseUrl(): String {

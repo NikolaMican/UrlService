@@ -11,7 +11,7 @@ import org.springframework.web.server.ResponseStatusException
 import java.sql.SQLException
 import java.util.*
 
-data class EditDynamicUrlRequest(val apiKey: String?, val redirectUrl: String?, val urlId: String?)
+data class EditDynamicUrlRequest(val apiKey: String?, val alias: String?, val destinationUrl: String?, val urlId: String?)
 
 @RestController
 class EditDynamicUrlWebServiceRestController {
@@ -25,16 +25,18 @@ class EditDynamicUrlWebServiceRestController {
     fun editDynamicUrlPost(
         @RequestBody request: EditDynamicUrlRequest,
     ) {
-        LOG.info("Processing editDynamicUrlPost request. Received redirectUrl: ${request.redirectUrl}, urlId: ${request.urlId}")
-        if (request.redirectUrl.isNullOrBlank()) throw ResponseStatusException(BAD_REQUEST, "Received redirectUrl is null.")
+        LOG.info("Processing editDynamicUrlPost request. Received redirectUrl: ${request.destinationUrl}, urlId: ${request.urlId}")
+        if (request.destinationUrl.isNullOrBlank()) throw ResponseStatusException(BAD_REQUEST, "Received redirectUrl is null.")
+        if (request.alias.isNullOrBlank()) throw ResponseStatusException(BAD_REQUEST, "Received alias is null.")
         if (request.apiKey.isNullOrBlank()) throw ResponseStatusException(BAD_REQUEST, "Received apiKey is null.")
         if (request.urlId.isNullOrBlank()) throw ResponseStatusException(BAD_REQUEST, "Received urlId is null.")
 
         val user = userDbController.getByApiKey(request.apiKey) ?: throw ResponseStatusException(BAD_REQUEST, "Api key doesn't exist in database.")
 
         val dUBean = dynamicUrlDbController.get(user.idUser, request.urlId) ?: throw ResponseStatusException(BAD_REQUEST, "Required urlId: '${request.urlId}' doesn't exits for user: ${user.username}")
-        dUBean.redirectUrl = request.redirectUrl.lowercase().getNormalisedUrl()
-        dUBean.redirectUrl.throwExceptionIfRedirectUrlContainsOurDomain()
+        dUBean.destinationUrl = request.destinationUrl.lowercase().getNormalisedUrl()
+        dUBean.destinationUrl.throwExceptionIfRedirectUrlContainsOurDomain()
+        dUBean.alias = request.alias
         dynamicUrlDbController.edit(dUBean)
 
         //   http://localhost:8080/editDynamicUrl?urlId=123456&redirectUrl=www.rts.rs
@@ -58,9 +60,15 @@ class EditDynamicUrlWebServiceController {
     @Throws(SQLException::class)
     fun editDynamicUrl(
         @RequestParam(name = "apiKey") apiKey: String?,
+        @RequestParam(name = "alias") alias: String,
         @RequestParam(name = "urlId") urlId: String,
-        @RequestParam(name = "redirectUrl") redirectUrl: String
+        @RequestParam(name = "destinationUrl") destinationUrl: String
     ) {
-        restController.editDynamicUrlPost(EditDynamicUrlRequest(apiKey, redirectUrl, urlId))
+        restController.editDynamicUrlPost(EditDynamicUrlRequest(
+            apiKey = apiKey,
+            alias = alias,
+            destinationUrl = destinationUrl,
+            urlId = urlId
+        ))
     }
 }

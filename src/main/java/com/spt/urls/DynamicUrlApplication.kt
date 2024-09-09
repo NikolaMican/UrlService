@@ -5,6 +5,7 @@
  */
 package com.spt.urls
 
+import com.spt.urls.extensions.logTime
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import com.spt.urls.services.IpService
@@ -17,7 +18,9 @@ open class DynamicUrlApplication
 val MY_IP_ADDRESS = IpService().getMyIpAddress()
 
 fun main(args: Array<String>) {
-    println("========== MY_IP_ADDRESS: $MY_IP_ADDRESS")
+    println()
+    println()
+    println(logTime() + " ========== MY_IP_ADDRESS: $MY_IP_ADDRESS")
 //    SpringApplication.run(DynamicUrlApplication::class.java, *args)
 
     SpringApplication(DynamicUrlApplication::class.java).apply {
